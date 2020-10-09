@@ -1,16 +1,35 @@
 package me.kevinntech.demowebmvc;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/hello")
 public class SampleController {
 
-    @RequestMapping({"/kevin.*", "/kevin"})
+    @GetMapping("/events")
     @ResponseBody
-    public String helloKevin(){
-        return "hello kevin";
+    public String events(){
+        return "events";
+    }
+
+    @GetMapping("/events/{id}")
+    @ResponseBody
+    public String getAnEvents(@PathVariable int id){
+        return "events";
+    }
+
+
+    @DeleteMapping("/events/{id}")
+    @ResponseBody
+    public String removeAnEvents(@PathVariable int id){
+        return "events";
+    }
+
+    @GetHelloMapping
+    @ResponseBody
+    public String hello(){
+        return "hello";
     }
 
 }
