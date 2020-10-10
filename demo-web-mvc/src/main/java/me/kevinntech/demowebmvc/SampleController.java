@@ -1,35 +1,59 @@
 package me.kevinntech.demowebmvc;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
+@SessionAttributes("event")
 public class SampleController {
 
-    @GetMapping("/events")
-    @ResponseBody
-    public String events(){
-        return "events";
+    @GetMapping("/events/form")
+    public String eventsForm(Model model){
+        Event newEvent = new Event();
+        newEvent.setLimit(50);
+        model.addAttribute("event", newEvent);
+        return "/events/form";
     }
 
-    @GetMapping("/events/{id}")
-    @ResponseBody
-    public String getAnEvents(@PathVariable int id){
-        return "events";
+    @PostMapping("/events")
+    public String createEvent(@Validated @ModelAttribute Event event ,
+                              BindingResult bindingResult,
+                              SessionStatus sessionStatus){
+        if(bindingResult.hasErrors()){
+            return "/events/form";
+        }
+
+        // 데이터베이스에서 save
+
+        // 세션을 비울 때는
+        sessionStatus.setComplete();
+
+        return "redirect:/events/list"; // prefix
     }
 
+    @GetMapping("/events/list")
+    public String getEvents(Model model){
+        Event event = new Event();
+        event.setName("spring"); // 데이터베이스에서 읽어 왔다고 가정
+        event.setLimit(10);
 
-    @DeleteMapping("/events/{id}")
-    @ResponseBody
-    public String removeAnEvents(@PathVariable int id){
-        return "events";
-    }
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(event);
 
-    @GetHelloMapping
-    @ResponseBody
-    public String hello(){
-        return "hello";
+        model.addAttribute("eventList", eventList);
+
+        return "/events/list";
     }
 
 }
