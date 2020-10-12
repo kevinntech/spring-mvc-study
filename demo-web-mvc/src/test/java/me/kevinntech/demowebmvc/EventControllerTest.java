@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class SampleControllerTest {
+public class EventControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -67,6 +67,7 @@ public class SampleControllerTest {
                     .flashAttr("newEvent", newEvent))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists("categories"))
                 .andExpect(xpath("//p").nodeCount(2)); // p 노드가 2개 인지 확인한다.
     }
 }

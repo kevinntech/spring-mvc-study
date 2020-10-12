@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,12 +15,14 @@ import java.util.List;
 
 @Controller
 @SessionAttributes("event")
-public class SampleController {
+public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(Model model){
-        model.addAttribute("event", new Event()); // 1) 모델에 저장한 event 객체가 Session에 저장된다.
-        return "/events/form-name"; // 2) 해당 뷰에서 모델 객체를 사용한다.
+        throw new EventException();
+
+     //   model.addAttribute("event", new Event());
+     //   return "/events/form-name";
     }
 
     @PostMapping("/events/form/name")
@@ -72,3 +75,4 @@ public class SampleController {
     }
 
 }
+
